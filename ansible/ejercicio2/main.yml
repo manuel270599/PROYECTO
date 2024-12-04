@@ -1,0 +1,49 @@
+---
+- name: Instalar Nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Crear directorio para certificados SSL
+  file:
+    path: /etc/ssl/nginx
+    state: directory
+    mode: '0755'
+
+- name: Generar certificado SSL autofirmado
+  openssl_certificate:
+    path: /etc/ssl/nginx/nginx-selfsigned.crt
+    privatekey_path: /etc/ssl/nginx/nginx-selfsigned.key
+    common_name: "{{ ansible_fqdn }}"
+    state: present
+    provider: selfsigned
+    days: 365
+  
+- name: Copiar archivo de configuración de Nginx para SSL
+  template:
+    src: nginx-ssl.conf.j2
+    dest: /etc/nginx/sites-available/default
+  notify:
+    - Reiniciar Nginx
+
+- name: Habilitar UFW
+  ufw:
+    state: enabled
+    policy: deny
+    logging: yes
+
+- name: Permitir tráfico SSH
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Permitir tráfico HTTP
+  ufw:
+    rule: allow
+    name: 'Nginx HTTP'
+
+- name: Permitir tráfico HTTPS
+  ufw:
+    rule: allow
+    name: 'Nginx HTTPS'

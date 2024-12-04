@@ -1,10 +1,10 @@
 - name: Actualizar e instalar paquetes
-      apt:
-        update_cache: yes
-        name:
-          - git
-          - curl
-        state: present
+  apt:
+    update_cache: yes
+    name:
+      - git
+      - curl
+    state: present
 
 - name: Configurar la zona horaria
   ansible.builtin.command: timedatectl set-timezone America/Lima

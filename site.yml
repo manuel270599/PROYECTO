@@ -6,11 +6,11 @@
   remote_user: vagrant
   tasks:
       - import_tasks: ansible/ejercicio1/main.yml
-    #  - import_tasks: ansible/ejercicio1/user_and_group.yml
+      - import_tasks: ansible/ejercicio2/main.yml
     #  - import_tasks: ansible/ejercicio1/authorized_keys.yml
     #  - import_tasks: ansible/ejercicio1/two_factor.yml
     #  - import_tasks: ansible/ejercicio1/web_application.yml
     #  - import_tasks: ansible/ejercicio1/sudoers.yml
     #  - import_tasks: ansible/ejercicio1/firewall.yml
   handlers:
-    #  - import_tasks: handlers/restart_ssh.yml
+      - import_tasks: handlers/restart_ssh.yml
