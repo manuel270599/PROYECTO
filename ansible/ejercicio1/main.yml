@@ -6,11 +6,40 @@
           - curl
         state: present
 
-- name: Crear un usuario y grupo
-      user:
-        name: devuser
-        groups: admin
-        append: yes
-        shell: /bin/bash
-        create_home: yes
-        password: "{{ 'DesarrolloSoftware' | password_hash('sha512') }}"
+- name: Configurar la zona horaria
+  ansible.builtin.command: timedatectl set-timezone America/Lima
+  args:
+    warn: false
+
+- name: Configurar locales
+  locale_gen:
+    name: es_PE.UTF-8
+    state: present
+
+- name: Establecer el locale predeterminado
+  copy:
+    dest: /etc/default/locale
+    content: |
+      LANG=es_PE.UTF-8
+      LC_ALL=es_PE.UTF-8
+
+- name: Crear un grupo llamado admin
+  group:
+    name: admin
+    state: present
+
+- name: Crear un nuevo usuario
+  user:
+    name: dev_user
+    state: present
+    password: "{{ 'contraseña' | password_hash('sha512') }}"
+    groups: sudo
+    shell: /bin/bash
+    state: present
+  become: yes
+
+- name: Asignar  al grupo 'admin'
+  user:
+    name: dev_user
+    groups: admin
+    append: yes
