@@ -5,13 +5,13 @@
     state: present
     update_cache: yes
 
-- name: Crear directorio para certificados SSL
+- name: Directorio para certificados SSL
   file:
     path: /etc/ssl/nginx
     state: directory
     mode: '0755'
 
-- name: Generar certificado SSL autofirmado
+- name: Certificado SSL autofirmado
   openssl_certificate:
     path: /etc/ssl/nginx/nginx-selfsigned.crt
     privatekey_path: /etc/ssl/nginx/nginx-selfsigned.key
